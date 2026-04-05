@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'motion/react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Menu, X, Droplets, Wind, Sparkles, ChevronDown, CheckCircle2, ShoppingCart } from 'lucide-react';
 
 // --- Types ---
@@ -114,7 +114,7 @@ const Navbar = ({ cartCount, onOpenCart, onScrollTo }: { cartCount: number, onOp
   );
 };
 
-const ProductCard = ({ product, onAddToCart }: { product: Product, onAddToCart: (p: Product) => void }) => {
+const ProductCard: React.FC<{ product: Product, onAddToCart: (p: Product) => void }> = ({ product, onAddToCart }) => {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 30 }}
@@ -240,15 +240,6 @@ export default function App() {
     offset: ["start start", "end end"]
   });
 
-  // Bottle transformations
-  const bottleY = useTransform(scrollYProgress, [0, 0.3, 0.6, 1], ["0%", "40%", "10%", "50%"]);
-  const bottleScale = useTransform(scrollYProgress, [0, 0.3, 0.6, 1], [1.2, 2.5, 0.8, 1.5]);
-  const bottleRotate = useTransform(scrollYProgress, [0, 0.5, 1], [0, 15, -10]);
-  const bottleOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [1, 1, 1, 0.8]);
-
-  const smoothScale = useSpring(bottleScale, { stiffness: 100, damping: 30 });
-  const smoothY = useSpring(bottleY, { stiffness: 100, damping: 30 });
-
   const addToCart = (product: Product) => {
     setCart(prev => [...prev, product]);
     setNotification(`${product.name} added to your bag.`);
@@ -275,42 +266,6 @@ export default function App() {
         isVisible={!!notification} 
         onClose={() => setNotification(null)} 
       />
-
-      {/* Animated Perfume Bottle - Fixed during scroll sections */}
-      <div className="fixed inset-0 pointer-events-none z-30 flex items-center justify-center">
-        <motion.div
-          style={{
-            y: smoothY,
-            scale: smoothScale,
-            rotate: bottleRotate,
-            opacity: bottleOpacity,
-          }}
-          className="relative w-64 h-96 md:w-80 md:h-[30rem]"
-        >
-          {/* The Bottle Body */}
-          <div className="absolute inset-0 bg-gradient-to-br from-ocean-500/40 via-ocean-800/80 to-ocean-950 rounded-[2rem] border border-white/20 shadow-[0_0_100px_rgba(14,165,233,0.4)] overflow-hidden">
-            {/* Liquid Effect */}
-            <motion.div 
-              className="absolute bottom-0 left-0 w-full bg-ocean-400/30"
-              animate={{ height: ["60%", "65%", "60%"] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
-            {/* Branding */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
-              <span className="text-xs tracking-[0.5em] uppercase opacity-50 mb-2">Parfum</span>
-              <h2 className="text-4xl font-serif font-bold tracking-widest text-white">soHELL</h2>
-              <span className="text-[10px] tracking-[0.3em] uppercase opacity-40 mt-8">Deep Ocean</span>
-            </div>
-            {/* Reflections */}
-            <div className="absolute top-0 left-4 w-4 h-full bg-white/10 blur-sm" />
-            <div className="absolute top-0 right-8 w-1 h-full bg-white/5 blur-[1px]" />
-          </div>
-          
-          {/* Bottle Cap */}
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-20 h-10 bg-gradient-to-b from-slate-200 to-slate-400 rounded-lg shadow-lg border border-white/30" />
-          <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-12 h-4 bg-slate-300 rounded-sm" />
-        </motion.div>
-      </div>
 
       {/* Section 1: Hero */}
       <section id="hero" className="relative h-screen flex flex-col items-center justify-center text-center px-6">
