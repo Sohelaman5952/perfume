@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  
+  --color-ocean-950: #020617;
+  --color-ocean-900: #0f172a;
+  --color-ocean-800: #1e293b;
+  --color-ocean-500: #0ea5e9;
+  --color-ocean-400: #38bdf8;
+}
+
+@layer base {
+  body {
+    @apply bg-ocean-950 text-slate-200 antialiased selection:bg-ocean-500/30;
+  }
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-md border border-white/10;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-ocean-400;
+}
